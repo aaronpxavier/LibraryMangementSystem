@@ -49,9 +49,6 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
-                    <excludes>
-                        <exclude>/src/main/java/Main*</exclude>
-                    </excludes>
                 </configuration>
             </plugin>
             <plugin>
@@ -61,7 +58,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.fltprep.dttp.Dttp</mainClass>
+                            <mainClass>com.smoothstack.lms.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
