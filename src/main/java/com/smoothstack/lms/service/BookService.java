@@ -2,6 +2,7 @@ package com.smoothstack.lms.service;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.LinkedList;
 import java.util.List;
 
 import com.smoothstack.lms.dao.AuthorDAO;
@@ -9,7 +10,7 @@ import com.smoothstack.lms.dao.BookDAO;
 import com.smoothstack.lms.entity.Author;
 import com.smoothstack.lms.entity.Book;
 
-public class AdministratorService {
+public class BookService {
 
 	public ConnectionUtil conUtil = new ConnectionUtil();
 
@@ -43,6 +44,10 @@ public class AdministratorService {
 				conn.close();
 			}
 		}
+	}
+
+	public List<Book> addBook(int branchId, Book book) {
+		return new LinkedList();
 	}
 
 	public List<Book> getBooks(String searchString) {

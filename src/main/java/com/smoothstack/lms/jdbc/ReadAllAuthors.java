@@ -24,7 +24,7 @@ public class ReadAllAuthors {
 	public static String password = "root";
 
 	/**
-	 * @param args
+	 * @param args console arguments
 	 */
 	public static void main(String[] args) {
 		

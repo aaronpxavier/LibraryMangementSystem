@@ -19,7 +19,9 @@ public class Author {
 		this.authorId = authorId;
 		this.authorName = authorName;
 	}
-	
+	public Author(String authorName) {
+		this.authorName = authorName;
+	}
 	public Integer getAuthorId() {
 		return authorId;
 	}

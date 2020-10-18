@@ -13,7 +13,7 @@ import com.smoothstack.lms.entity.Book;
 import com.smoothstack.lms.entity.Book;
 
 /**
- * @book ppradhan
+ * @author  ppradhan
  *
  */
 public class BookDAO extends BaseDAO<Book>{

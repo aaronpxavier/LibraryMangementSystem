@@ -13,16 +13,23 @@ import java.sql.SQLException;
  */
 public class ConnectionUtil {
 	
-	public String driverName = "com.mysql.cj.jdbc.Driver";
-	public String url = "jdbc:mysql://localhost:3306/library?useSSL=false";
-	public String userName = "root";
-	public String password = "root";
+	public final String DRIVER_NAME = "com.mysql.cj.jdbc.Driver";
+	public final String URL;
+	public final String USER_NAME;
+	public final String PASS;
 
+	ConnectionUtil() {
+		AccessCredentials creds = new AccessCredentials();
+		URL = "jdbc:mysql://" + creds.getDbHost() + ":" + creds.getDbPort() + "/library?useSSL=false";
+		USER_NAME = creds.getDbUser();
+		PASS = creds.getDbPass();
+	}
 	public Connection getConnection(){
+		new AccessCredentials().toString();
 		Connection conn = null;
 		try {
-			Class.forName(driverName);
-			conn = DriverManager.getConnection(url, userName, password);
+			Class.forName(DRIVER_NAME); //WT* is this ?
+			conn = DriverManager.getConnection(URL, USER_NAME, PASS);
 			conn.setAutoCommit(Boolean.FALSE);
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
