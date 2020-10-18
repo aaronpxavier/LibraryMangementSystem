@@ -2,7 +2,7 @@ package com.smoothstack.lms.menu;
 
 public class LMSMenu {
 
-    private final static String NEW_LINE = System.getProperty("line.separator");
+    protected final static String NEW_LINE = System.getProperty("line.separator");
     private final static String MAIN_MENU = String.join(
             NEW_LINE,
             "Welcome to the SS Library Management System. Which category of a user are you?",
@@ -41,7 +41,7 @@ public class LMSMenu {
         this.menu = menu;
     }
 
-    protected static void printMenu (MenusEnum menu) throws Exception {
+    protected void printMenu (MenusEnum menu) throws Exception {
         String msg = "";
         switch(menu) {
             case MAIN:
@@ -64,13 +64,14 @@ public class LMSMenu {
                 break;
             case BORROWER_BOOK_PICKER:
                 msg = BORROWER_PICK_BRANCH_HEADER + bookOptions();
+                break;
             default:
                 throw new Exception("INVALID MENU OPTION");
         }
         System.out.println(msg);
     }
 
-    private static int size(MenusEnum menu) {
+    private int size(MenusEnum menu) {
         switch(menu) {
             case MAIN:
                 return MAIN_SIZE;

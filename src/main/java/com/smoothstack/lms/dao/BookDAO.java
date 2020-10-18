@@ -32,7 +32,7 @@ public class BookDAO extends BaseDAO<Book>{
 
 	public void updateBook(Book book) throws ClassNotFoundException, SQLException {
 		save("UPDATE tbl_book SET bookName = ? WHERE bookId = ?",
-				new Object[] { book.getTitle(), book.getBookId() });
+				new Object[] { book.getBookId(), book.getTitle(), book.getPublisher().getId()});
 	}
 
 	public void deleteBook(Book book) throws ClassNotFoundException, SQLException {
@@ -48,6 +48,10 @@ public class BookDAO extends BaseDAO<Book>{
 		return read("SELECT * FROM tbl_book WHERE title LIKE ?", new Object[] {searchString});
 	}
 
+	public Book getBookById(int bookId) throws SQLException, ClassNotFoundException {
+		return read("SELECT * FROM tbl_book WHERE bookId = ?", new Object[] {bookId}).get(0);
+	}
+
 	@Override
 	public List<Book> extractData(ResultSet rs) throws SQLException, ClassNotFoundException {
 		List<Book> books = new ArrayList<>();
@@ -55,9 +59,12 @@ public class BookDAO extends BaseDAO<Book>{
 		while (rs.next()) {
 			Book b = new Book(rs.getInt("bookId"), rs.getString("title"));
 			b.setAuthors(adao.read("select * from tbl_author where authorId IN (select authorId from tbl_book_authors where bookId = ?)", new Object[] {b.getBookId()}));
-			//b.setGenres()
+			b.setIsbn(rs.getString("isbn"));
+			b.setPublisher(new PublisherDAO(conn).readByPubId(rs.getInt("pubId")));
+			b.setGenres(new GenreDAO(conn).readByBookId(b.getBookId()));
 			books.add(b);
 		}
+		rs.close();
 		return books;
 	}
 }

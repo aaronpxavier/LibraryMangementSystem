@@ -11,9 +11,9 @@ public class Book {
 	private String title;
 	private List<Author> authors;
 	private String isbn;
-//	private List<Genre> genres;
-//	private List<Branch> branches;
-//	private Publisher publisher;
+	private List<Genre> genres;
+	private Publisher publisher;
+
 	public Book(Integer bookId, String title) {
 		super();
 		this.bookId = bookId;
@@ -46,6 +46,22 @@ public class Book {
 	}
 	public String getIsbn() {
 		return isbn;
+	}
+
+	public Publisher getPublisher() {
+		return publisher;
+	}
+
+	public void setPublisher(Publisher publisher) {
+		this.publisher = publisher;
+	}
+
+	public List<Genre> getGenres() {
+		return genres;
+	}
+
+	public void setGenres(List<Genre> genres) {
+		this.genres = genres;
 	}
 }
 

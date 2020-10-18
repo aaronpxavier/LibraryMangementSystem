@@ -20,7 +20,7 @@ public class ConnectionUtil {
 
 	ConnectionUtil() {
 		AccessCredentials creds = new AccessCredentials();
-		URL = "jdbc:mysql://" + creds.getDbHost() + ":" + creds.getDbPort() + "/library?useSSL=false";
+		URL = "jdbc:mysql://" + creds.getDbHost() + ":" + creds.getDbPort() + "/library?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC";
 		USER_NAME = creds.getDbUser();
 		PASS = creds.getDbPass();
 	}

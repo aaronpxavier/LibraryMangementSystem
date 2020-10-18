@@ -1,14 +1,20 @@
 package com.smoothstack.lms;
 
 
+import com.smoothstack.lms.dao.BranchDAO;
+import com.smoothstack.lms.entity.Book;
+import com.smoothstack.lms.entity.Branch;
 import com.smoothstack.lms.menu.LMSMenu;
 import com.smoothstack.lms.menu.MenusEnum;
 import com.smoothstack.lms.service.AccessCredentials;
+import com.smoothstack.lms.service.BookService;
+import com.smoothstack.lms.service.BranchService;
 import com.smoothstack.lms.service.GoogleBooksService;
 import com.smoothstack.lms.users.Admin;
 import com.smoothstack.lms.users.Borrower;
 import com.smoothstack.lms.users.Librarian;
 
+import java.sql.Connection;
 import java.util.Scanner;
 
 public class Main {
@@ -35,6 +41,8 @@ public class Main {
         }
     }
     public static void main(String[] args) {
-        new GoogleBooksService().booksSearch("Harry Potter");
+        for(Branch branch : new BranchService().getAllBranches()) {
+            System.out.println();
+        }
     }
 }

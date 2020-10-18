@@ -46,9 +46,6 @@ public class BookService {
 		}
 	}
 
-	public List<Book> addBook(int branchId, Book book) {
-		return new LinkedList();
-	}
 
 	public List<Book> getBooks(String searchString) {
 		try(Connection conn = conUtil.getConnection()) {
