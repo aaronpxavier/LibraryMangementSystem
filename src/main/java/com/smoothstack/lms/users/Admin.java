@@ -13,6 +13,18 @@ public class Admin extends User {
     public Admin() {
     }
 
+    private boolean deleteBook(Book book) {
+        BookService bookService = new BookService();
+        try {
+            bookService.deleteBook(book);
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+    }
+
     private void printBooks(List<Book> books, boolean inReverse) {
         int i;
         Iterator<Book> iterator;
@@ -36,8 +48,6 @@ public class Admin extends User {
             return false;
         selectedBook = books.get(Integer.parseInt(menuOption) - 1);
         System.out.println("You Selected Book: \n" + selectedBook);
-//        System.out.println("Press Enter any character to continue");
-//        scanner.nextLine();
         if(selectedBook.getPublisher() != null) {
             selectedBook.getPublisher().setAddress(new GoogleBooksService().publihserAddress(selectedBook.getIsbn()));
             if(selectedBook.getPublisher().getAddress() == null || selectedBook.getPublisher().getAddress().compareTo("") == 0) {
@@ -67,7 +77,7 @@ public class Admin extends User {
         }
     }
 
-    private void addBook(Scanner scanner) throws Exception {
+    private void addBookMenu(Scanner scanner) throws Exception {
         String menuOption = "";
         menuStack.push(new LMSAdminMenu(MenusEnum.ADMIN_BOOK_ADD));
         while (menuOption.toLowerCase().compareTo("quit") != 0) {
@@ -88,15 +98,19 @@ public class Admin extends User {
         menuStack.pop();
     }
 
-    private void deleteBooks(Scanner scanner) throws Exception {
+    private void deleteBooksMenu(Scanner scanner) throws Exception {
         BookService bookService = new BookService();
-        int input = 0;
+        String input = "";
         List<Book> books = bookService.getBooks();
         menuStack.push(new LMSAdminMenu(MenusEnum.ADMIN_BOOK_DELETE));
-        while(input != books.size() + 1) {
-            printBooks(bookService.getBooks(), false);
+        while(input.toLowerCase().compareTo("quit") != 0) {
+            printBooks(books, false);
             menuStack.peek().printMenu();
-            input = getNextInt(scanner);
+            input = getNextString(scanner);
+            if(deleteBook(books.get(Integer.parseInt(input)-1))) {
+                input = "quit";
+            }
+
         }
         menuStack.pop();
     }
@@ -110,9 +124,9 @@ public class Admin extends User {
             if(menuOption == null)
                 System.out.println("Invalid entry try again");
             else if(menuOption == 1)
-                addBook(scanner);
+                addBookMenu(scanner);
             else if(menuOption == 3)
-                deleteBooks(scanner);
+                deleteBooksMenu(scanner);
         }
         menuStack.pop();
     }

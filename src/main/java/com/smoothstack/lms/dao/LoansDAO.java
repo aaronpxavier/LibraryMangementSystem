@@ -24,6 +24,10 @@ public class LoansDAO extends BaseDAO<Loan> {
         return read("SELECT * FROM tbl_book_loans WHERE branchId = ?", new Object[] {branchId});
     }
 
+    public List<Loan> readByBookId(int bookId) throws SQLException, ClassNotFoundException {
+        return read("SELECT * FROM tbl_book_loans WHERE bookId = ?", new Object[] {bookId});
+    }
+
     @Override
     public List<Loan> extractData(ResultSet rs) throws SQLException, ClassNotFoundException {
         List<Loan> loans = new ArrayList<>();

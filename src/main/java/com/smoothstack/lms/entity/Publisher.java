@@ -61,6 +61,6 @@ public class Publisher {
 
     @Override
     public String toString() {
-        return name + (address == null ? "" : "Address: " + address);
+        return "Publisher: " + name + (address == null ? "" : ", Address: " + address);
     }
 }
