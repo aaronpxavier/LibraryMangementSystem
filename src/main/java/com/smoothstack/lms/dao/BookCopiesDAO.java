@@ -24,7 +24,7 @@ public class BookCopiesDAO extends BaseDAO{
         BranchDAO branchDAO = new BranchDAO(conn);
         while (rs.next()) {
             BookCopies bookCopies = new BookCopies(rs.getInt("noOfCopies"));
-            bookCopies.setBook(bookDAO.getBookById(rs.getInt("bookId")));
+            bookCopies.setBook(bookDAO.readById(rs.getInt("bookId")));
             bookCopies.setBranch(branchDAO.readById(rs.getInt("branchId")));
         }
         return bookCopiesList;

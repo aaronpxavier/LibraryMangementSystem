@@ -1,20 +1,11 @@
 package com.smoothstack.lms;
 
-
-import com.smoothstack.lms.dao.BranchDAO;
-import com.smoothstack.lms.entity.Book;
-import com.smoothstack.lms.entity.Branch;
 import com.smoothstack.lms.menu.LMSMenu;
 import com.smoothstack.lms.menu.MenusEnum;
-import com.smoothstack.lms.service.AccessCredentials;
-import com.smoothstack.lms.service.BookService;
-import com.smoothstack.lms.service.BranchService;
-import com.smoothstack.lms.service.GoogleBooksService;
 import com.smoothstack.lms.users.Admin;
 import com.smoothstack.lms.users.Borrower;
 import com.smoothstack.lms.users.Librarian;
 
-import java.sql.Connection;
 import java.util.Scanner;
 
 public class Main {
@@ -27,22 +18,27 @@ public class Main {
         int menuOption = 0;
 
         while (menuOption != 4) {
-            mainMenu.printMenu();
-            menuOption = scanner.nextInt();
-            if (menuOption == 1) {
-                librarian.start();
-            } else if (menuOption == 2) {
-                admin.start();
-            } else if (menuOption == 3) {
-                borrower.start();
-            } else if (menuOption != 4) {
-                System.err.println("Invalid entry! Try Again.");
+            try {
+                mainMenu.printMenu();
+                menuOption = scanner.nextInt();
+                scanner.nextLine();
+                if (menuOption == 1) {
+                    librarian.start(scanner);
+                } else if (menuOption == 2) {
+                    admin.start(scanner);
+                } else if (menuOption == 3) {
+                    borrower.start(scanner);
+                } else if (menuOption != 4) {
+                    System.err.println("Invalid entry! Try Again.");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
+
     public static void main(String[] args) {
-        for(Branch branch : new BranchService().getAllBranches()) {
-            System.out.println();
-        }
+        printMain();
+        //new GoogleBooksService().publihserAddress("0451526538");
     }
 }

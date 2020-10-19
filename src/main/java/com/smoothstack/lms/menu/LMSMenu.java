@@ -33,15 +33,16 @@ public class LMSMenu {
     private final static int LIBRARIAN_MAIN_SIZE = 2;
     private final static int LIBRARIAN_OPTIONS_SIZE = 0;
     protected MenusEnum menu;
-    private int currentMenuSize = 0;
+    protected int currentMenuSize = 0;
 
     //public LMSMenu() {}
 
     public LMSMenu(MenusEnum menu) {
         this.menu = menu;
+        setSize();
     }
 
-    protected void printMenu (MenusEnum menu) throws Exception {
+    public void printMenu () throws Exception {
         String msg = "";
         switch(menu) {
             case MAIN:
@@ -71,13 +72,16 @@ public class LMSMenu {
         System.out.println(msg);
     }
 
-    private int size(MenusEnum menu) {
+    protected int setSize() {
         switch(menu) {
             case MAIN:
+                currentMenuSize = MAIN_SIZE;
                 return MAIN_SIZE;
             case MAIN_LIBRARIAN:
+                currentMenuSize = LIBRARIAN_MAIN_SIZE;
                 return LIBRARIAN_MAIN_SIZE;
             case LIBRARIAN_OPTIONS:
+                currentMenuSize = LIBRARIAN_OPTIONS_SIZE;
                 return LIBRARIAN_OPTIONS_SIZE;
             case UPDATE_BRANCH:
                 //todo
@@ -96,25 +100,17 @@ public class LMSMenu {
         }
     }
 
-    private static String branchOptions() {
+    private String branchOptions() {
         //todo
         return "";
     }
 
-    private static String bookOptions() {
+    private String bookOptions() {
         //todo
         return "";
-    }
-
-    public void printMenu() {
-        try {
-            printMenu(menu);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     public int getSize() {
-        return size(menu);
+        return currentMenuSize;
     }
 }

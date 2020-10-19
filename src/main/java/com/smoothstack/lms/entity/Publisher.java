@@ -1,7 +1,7 @@
 package com.smoothstack.lms.entity;
 
 public class Publisher {
-    int id;
+    Integer id;
     String name;
     String address;
     String publisherPhone;
@@ -17,7 +17,17 @@ public class Publisher {
         this.address = address;
     }
 
-    public int getId() {
+    public Publisher(String name, String address, String publisherPhone) {
+        this.name = name;
+        this.address = address;
+        this.publisherPhone = publisherPhone;
+    }
+
+    public Publisher(String name) {
+        this.name = name;
+    }
+
+    public Integer getId() {
         return id;
     }
 
@@ -47,5 +57,10 @@ public class Publisher {
 
     public void setPublisherPhone(String publisherPhone) {
         this.publisherPhone = publisherPhone;
+    }
+
+    @Override
+    public String toString() {
+        return name + (address == null ? "" : "Address: " + address);
     }
 }

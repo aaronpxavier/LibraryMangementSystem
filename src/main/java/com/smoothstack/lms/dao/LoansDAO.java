@@ -29,7 +29,7 @@ public class LoansDAO extends BaseDAO<Loan> {
         List<Loan> loans = new ArrayList<>();
         while(rs.next()) {
             Loan loan = new Loan();
-            loan.setBook(new BookDAO(conn).getBookById(rs.getInt("bookId")));
+            loan.setBook(new BookDAO(conn).readById(rs.getInt("bookId")));
             loan.setBranch(new BranchDAO(conn).readById(rs.getInt("branchId")));
             loan.setBorrower(new BorrowerDao(conn).readByCardNo(rs.getInt("cardNo")));
             loan.setDateIn(rs.getDate("dateIn"));

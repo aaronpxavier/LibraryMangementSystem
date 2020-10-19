@@ -34,7 +34,7 @@ public abstract class BaseDAO<T> {
 		pstmt.executeUpdate();
 	}
 	
-	public Integer saveWithPk(String sql, Object[] vals) throws ClassNotFoundException, SQLException {
+	public Integer saveWithPk(String sql, Object[] vals) throws SQLException {
 		PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 		if(vals !=null) {
 			int count = 1;
@@ -46,7 +46,7 @@ public abstract class BaseDAO<T> {
 		pstmt.executeUpdate();
 		ResultSet rs = pstmt.getGeneratedKeys();
 		if(rs.next()) {
-			return rs.getInt(0); //see if it's 0 or 1
+			return rs.getInt(1); //see if it's 0 or 1
 		}
 		return null;
 	}

@@ -3,10 +3,12 @@ package com.smoothstack.lms.users;
 import com.smoothstack.lms.menu.LMSMenu;
 import com.smoothstack.lms.menu.MenusEnum;
 
+import java.util.Scanner;
+
 
 public class Librarian extends User {
 
-    private void pickBranch() {
+    private void pickBranch(Scanner scanner) {
         int menuOptions = 0;
         menuStack.push(new LMSMenu(MenusEnum.BRANCHES_SELECTOR));
         while(menuOptions != menuStack.peek().getSize()) {
@@ -16,20 +18,20 @@ public class Librarian extends User {
     }
 
     @Override
-    public void start() {
+    public void start(Scanner scanner) {
         int menuOptions = 0;
         menuStack.push(new LMSMenu(MenusEnum.MAIN_LIBRARIAN));
         while(menuOptions != menuStack.peek().getSize()) {
-            menuStack.peek().printMenu();
             try {
+                menuStack.peek().printMenu();
                 menuOptions = scanner.nextInt();
                 if (menuOptions == 1) {
-                    pickBranch();
+                    pickBranch(scanner);
                 } else if (menuOptions != menuStack.peek().getSize()) {
-                    System.out.println("Invalid entry! Try Again.");
+                    printInputError();
                 }
             } catch(Exception e) {
-                System.out.println("Invalid entry must be valid Integer");
+                printIntInputError();
                 scanner.nextLine();
             }
         }

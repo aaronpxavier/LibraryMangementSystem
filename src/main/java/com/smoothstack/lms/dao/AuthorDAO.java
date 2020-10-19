@@ -1,6 +1,4 @@
-/**
- * 
- */
+
 package com.smoothstack.lms.dao;
 
 import java.sql.Connection;
@@ -21,8 +19,8 @@ public class AuthorDAO extends BaseDAO<Author> {
 		super(conn);
 	}
 
-	public void addAuthor(Author author) throws ClassNotFoundException, SQLException {
-		save("INSERT INTO tbl_author (authorName) VALUES (?)", new Object[] { author.getAuthorName() });
+	public Integer addAuthor(Author author) throws SQLException {
+		return saveWithPk("INSERT INTO tbl_author (authorName) VALUES (?)", new Object[] { author.getAuthorName() });
 	}
 
 	public void updateAuthor(Author author) throws ClassNotFoundException, SQLException {
@@ -45,6 +43,20 @@ public class AuthorDAO extends BaseDAO<Author> {
 	
 	public void addBookAuthors(Integer bookId, Integer authorId) throws ClassNotFoundException, SQLException {
 		save("INSERT INTO tbl_book_authors VALUES (?, ?)", new Object[] { bookId, authorId });
+	}
+
+	public Author readById(int authorId) throws SQLException, ClassNotFoundException {
+		List<Author> authors = read("Select * FROM tbl_author WHERE authorId = ?", new Object[] {authorId});
+		if (authors.isEmpty()) return null;
+		return authors.get(0);
+	}
+
+	public List<Author> readByName(String Author) throws SQLException, ClassNotFoundException {
+		return read("SELECT * FROM tbl_author WHERE authorName = ?", new Object[] {Author});
+	}
+
+	public boolean hasAuthor(int authorId) throws SQLException, ClassNotFoundException {
+		return readById(authorId) != null;
 	}
 
 	@Override

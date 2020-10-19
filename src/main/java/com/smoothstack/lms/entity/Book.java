@@ -63,5 +63,27 @@ public class Book {
 	public void setGenres(List<Genre> genres) {
 		this.genres = genres;
 	}
+
+	@Override
+	public String toString() {
+		final String NEW_LINE = System.getProperty("line.separator");
+		String resultString = "\tTitle: " + title + "\tISBN: " + isbn;
+		if(authors != null) {
+			resultString += NEW_LINE + "\t";
+			for (Author author : authors) {
+				resultString +=  author + ", ";
+			}
+		}
+		if (genres != null) {
+			resultString += NEW_LINE + "\tGenres: ";
+			for (Genre genre : genres) {
+				resultString += genre + ", ";
+			}
+		}
+		if (publisher != null) {
+			resultString += NEW_LINE + "\tPublisher: " + publisher;
+		}
+		return resultString;
+	}
 }
 

@@ -20,15 +20,32 @@ public class PublisherDAO extends BaseDAO<Publisher> {
         super(conn);
     }
 
-    public Publisher readByPubId(int pubId) throws SQLException, ClassNotFoundException {
-        return read("SELECT * FROM tbl_publihser WHERE publihserId = ?", new Object[] {pubId}).get(0);
+    public Integer addPublihser(Publisher publisher) throws SQLException {
+        return saveWithPk("INSERT INTO tbl_publisher (publisherName, publisherAddress, publisherPhone) VALUES(?, ?, ?)", new Object[] {publisher.getName(), publisher.getAddress(), publisher.getPublisherPhone()});
     }
+    public Publisher readById(int pubId) throws SQLException, ClassNotFoundException {
+        List<Publisher> publishers = read("SELECT * FROM tbl_publisher WHERE publisherId = ?", new Object[] {pubId});
+        return publishers.isEmpty() ? null : publishers.get(0);
+    }
+
+    public List<Publisher> readByName(String name) throws SQLException, ClassNotFoundException {
+        return read("SELECT * FROM tbl_publisher WHERE publisherName = ?", new Object[] {name});
+    }
+
+    public boolean hasPublisher(int pubId) throws SQLException, ClassNotFoundException {
+        return readById(pubId) == null ? false : true;
+    }
+
+    public boolean hasPublisher(String name) throws SQLException, ClassNotFoundException {
+        return readByName(name).isEmpty() ? false : true;
+    }
+
 
     @Override
     public List<Publisher> extractData(ResultSet rs) throws SQLException, ClassNotFoundException {
         List<Publisher> publishers = new ArrayList<>();
         while(rs.next()) {
-            Publisher publisher = new Publisher(rs.getInt("publisherId"), rs.getString("pubslisherName"), rs.getString("publsiherAddress"));
+            Publisher publisher = new Publisher(rs.getInt("publisherId"), rs.getString("publisherName"), rs.getString("publisherAddress"));
             publisher.setPublisherPhone(rs.getString("publisherPhone"));
             publishers.add(publisher);
         }
