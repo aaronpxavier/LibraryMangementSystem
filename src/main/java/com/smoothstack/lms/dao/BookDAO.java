@@ -10,8 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.smoothstack.lms.entity.Book;
-import com.smoothstack.lms.entity.Book;
-import com.smoothstack.lms.entity.Publisher;
+import com.smoothstack.lms.entity.Branch;
 
 /**
  * @author  ppradhan
@@ -38,13 +37,9 @@ public class BookDAO extends BaseDAO<Book>{
 	public boolean hasBook(int bookId) throws ClassNotFoundException, SQLException {
 		return readById(bookId) == null ? false : true;
 	}
-//	public Integer addBookWithPk(Book book) throws ClassNotFoundException, SQLException {
-//		return saveWithPk("INSERT INTO tbl_book (title) VALUES (?)", new Object[] { book.getTitle() });
-//	}
 
 	public void updateBook(Book book) throws ClassNotFoundException, SQLException {
-		save("UPDATE tbl_book SET bookName = ? WHERE bookId = ?",
-				new Object[] { book.getBookId(), book.getTitle(), book.getPublisher().getId()});
+		save("UPDATE tbl_book SET title = ? WHERE bookId = ?", new Object[] { book.getTitle(), book.getBookId()});
 	}
 
 	public void deleteBook(Book book) throws ClassNotFoundException, SQLException {
@@ -68,6 +63,10 @@ public class BookDAO extends BaseDAO<Book>{
 	public Book readByIsbn(String isbn) throws SQLException, ClassNotFoundException {
 		List<Book> books = read("SELECT * FROM tbl_book WHERE isbn = ?", new Object[] {isbn});
 		return books.isEmpty() ? null : books.get(0);
+	}
+
+	public List<Book> readAllBooksInBranch(Branch branch) throws SQLException, ClassNotFoundException {
+		return read("SELECT * FROM tbl_book WHERE bookId IN (SELECT bookId FROM tbl_book_copies WHERE branchId = ?)", new Object[] {branch.getId()});
 	}
 
 	public List<Book> readByPubId(int pubId) throws SQLException, ClassNotFoundException {

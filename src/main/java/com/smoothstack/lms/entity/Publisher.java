@@ -12,10 +12,7 @@ public class Publisher {
         this.address = address;
     }
 
-    public Publisher(String name, String address) {
-        this.name = name;
-        this.address = address;
-    }
+    public Publisher(String name, String address) { this.name = name; this.address = address; }
 
     public Publisher(String name, String address, String publisherPhone) {
         this.name = name;

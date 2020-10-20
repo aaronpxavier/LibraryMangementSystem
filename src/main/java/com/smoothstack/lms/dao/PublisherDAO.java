@@ -32,12 +32,25 @@ public class PublisherDAO extends BaseDAO<Publisher> {
         return read("SELECT * FROM tbl_publisher WHERE publisherName = ?", new Object[] {name});
     }
 
+    public List<Publisher> readAllPublishers() throws SQLException, ClassNotFoundException {
+        return read("SELECT * FROM tbl_publisher", new Object[] {});
+    }
+
     public boolean hasPublisher(int pubId) throws SQLException, ClassNotFoundException {
         return readById(pubId) == null ? false : true;
     }
 
     public boolean hasPublisher(String name) throws SQLException, ClassNotFoundException {
         return readByName(name).isEmpty() ? false : true;
+    }
+
+    public void deletePublisher(Publisher publisher) throws ClassNotFoundException, SQLException {
+        save("DELETE FROM tbl_publisher WHERE publisherId = ?", new Object[] {publisher.getId()});
+    }
+
+    public void update(Publisher publisher) throws ClassNotFoundException, SQLException {
+        save("UPDATE tbl_publisher SET publisherName = ?, publisherAddress = ?, publisherPhone = ? WHERE publisherId = ?"
+                , new Object[] {publisher.getName(), publisher.getAddress(), publisher.getPublisherPhone(), publisher.getId()});
     }
 
 

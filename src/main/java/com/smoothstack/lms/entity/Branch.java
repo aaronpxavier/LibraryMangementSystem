@@ -9,6 +9,11 @@ public class Branch {
     List<Loan> loans;
     List<BookCopies> booksOwned;
 
+    public Branch(String name, String address) {
+        this.name = name;
+        this.address = address;
+    }
+
     public List<BookCopies> getBooksOwned() {
         return booksOwned;
     }
@@ -54,5 +59,16 @@ public class Branch {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    @Override
+    public String toString() {
+        return "Branch{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", address='" + address + '\'' +
+                ", loans=" + loans +
+                ", booksOwned=" + booksOwned +
+                '}';
     }
 }

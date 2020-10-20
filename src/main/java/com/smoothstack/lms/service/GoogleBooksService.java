@@ -141,9 +141,3 @@ public class GoogleBooksService {
     }
 }
 
-/*
- * System.out.println(bookList.getLast().getTitle());
- *             System.out.println(bookList.getLast().getIsbn());
- *             System.out.println(bookList.getLast().getAuthors().get(0).getAuthorName());
- *             System.out.println();
- */
