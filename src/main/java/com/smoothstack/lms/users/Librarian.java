@@ -15,7 +15,10 @@ public class Librarian extends User {
     private void addCopiesToBranch(Branch branch, Book book, Scanner scanner) {
         try {
             BranchService branchService = new BranchService();
-            System.out.println("Existing number of copies: " + branchService.existingNumberOfCopies(branch, book));
+            Integer numberOfCopies = branchService.existingNumberOfCopies(branch, book);
+            if(numberOfCopies == null)
+                numberOfCopies = 0;
+            System.out.println("Existing number of copies: " + numberOfCopies);
             System.out.println("Enter new number of copies");
             int input = getNextInt(scanner);
             branchService.updateBranchCopies(branch, book, input);
@@ -55,11 +58,14 @@ public class Librarian extends User {
                 menuOptions = scanner.nextInt();
                 if (menuOptions == 1) {
                     Branch branch = selectBranch("Select Branch you Manage", scanner);
+                    if(branch == null)
+                        break;
                     options(branch, scanner);
                 } else if (menuOptions != menuStack.peek().getSize()) {
                     printInputError();
                 }
             } catch(Exception e) {
+                e.printStackTrace();
                 printIntInputError();
                 scanner.nextLine();
             }

@@ -131,6 +131,8 @@ public abstract class User {
         if(inputIsQuit(branchAddress) || branchAddress.toLowerCase().compareTo("n/a") == 0)
             return;
         try {
+            branch.setName(branchName);
+            branch.setAddress(branchAddress);
             new BranchService().updateBranch(branch);
             System.out.println("Successfully Updated");
         } catch (SQLException e) {

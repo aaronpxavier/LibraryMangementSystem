@@ -144,7 +144,11 @@ public class BranchService extends BaseService {
                 return null;
             if (conn == null || !isOutsideConnection)
                 conn = new ConnectionUtil().getConnection();
-            resultInt = new BookCopiesDAO(conn).readByBranchIdBookId(branch, book).getNoOfCopies();
+            BookCopies bookCopies = new BookCopiesDAO(conn).readByBranchIdBookId(branch, book);
+            if(bookCopies == null)
+                resultInt = 0;
+            else
+                resultInt = bookCopies.getNoOfCopies();
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
             if (conn != null && !isOutsideConnection) {

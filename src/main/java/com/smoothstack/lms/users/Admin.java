@@ -126,7 +126,7 @@ public class Admin extends User {
             print(books, false);
             menuStack.peek().printMenu();
             input = getNextString(scanner);
-            if(input.toLowerCase().compareTo("quit") != 0 && deleteBook(books.get(Integer.parseInt(input)-1))) {
+            if(input.toLowerCase().compareTo("quit") != 0 && deleteBook(books.get(books.size() - Integer.parseInt(input)))) {
                 input = "quit";
             }
         }
@@ -266,7 +266,7 @@ public class Admin extends User {
     private void booksCrudMenu(Scanner scanner) throws Exception {
         Integer menuOption = 0;
         menuStack.push(new LMSAdminMenu(MenusEnum.ADMIN_BOOK_MAIN));
-        while(menuOption != menuStack.peek().getSize()) {
+        while(menuOption != null && menuOption != menuStack.peek().getSize()) {
             menuStack.peek().printMenu();
             menuOption = getNextInt(scanner);
             if(menuOption == null)
@@ -536,7 +536,7 @@ public class Admin extends User {
                 String input = getNextString(scanner);
                 if(inputIsQuit(input))
                     break;
-                deleteBranch(branches.get(Integer.parseInt(input) - 1), scanner);
+                deleteBranch(branches.get(branches.size() - Integer.parseInt(input)), scanner);
             } else if(menuOption == 4) {
                 this.print(branches, false);
             }
