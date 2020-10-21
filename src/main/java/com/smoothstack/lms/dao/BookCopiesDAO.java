@@ -1,6 +1,8 @@
 package com.smoothstack.lms.dao;
 
+import com.smoothstack.lms.entity.Book;
 import com.smoothstack.lms.entity.BookCopies;
+import com.smoothstack.lms.entity.Branch;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -14,7 +16,20 @@ public class BookCopiesDAO extends BaseDAO{
     }
 
     public List<BookCopies> readByBranchId(int branchId) throws SQLException, ClassNotFoundException {
+        System.out.println(branchId);
+        if(branchId == 16)
+            System.out.println(16);
         return read("SELECT * FROM tbl_book_copies WHERE branchId = ?", new Object[] {branchId});
+    }
+
+    public BookCopies readByBranchIdBookId(Branch branch, Book book) throws SQLException, ClassNotFoundException {
+        List<BookCopies> copies = read("SELECT * FROM tbl_book_copies WHERE bookId = ? AND branchId = ?", new Object[] {branch.getId(), book.getBookId()});
+        return copies.isEmpty() ? null : copies.get(0);
+    }
+
+    public void updateBranchBookCopies(Branch branch, Book book, int copies) throws  SQLException, ClassNotFoundException {
+        save("UPDATE tbl_book_copies SET bookId = ?, branchId = ?, noOfCopies = ? WHERE bookId = ? and branchId = ?",
+                new Object[] {book.getBookId(), branch.getId(), copies, book.getBookId(), branch.getId()});
     }
 
     @Override
@@ -25,8 +40,10 @@ public class BookCopiesDAO extends BaseDAO{
         while (rs.next()) {
             BookCopies bookCopies = new BookCopies(rs.getInt("noOfCopies"));
             bookCopies.setBook(bookDAO.readById(rs.getInt("bookId")));
-            bookCopies.setBranch(branchDAO.readById(rs.getInt("branchId")));
+            //bookCopies.setBranch(branchDAO.readById(rs.getInt("branchId")));
+            bookCopiesList.add(bookCopies);
         }
+
         return bookCopiesList;
     }
 }

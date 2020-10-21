@@ -12,10 +12,7 @@ public class Publisher {
         this.address = address;
     }
 
-    public Publisher(String name, String address) {
-        this.name = name;
-        this.address = address;
-    }
+    public Publisher(String name, String address) { this.name = name; this.address = address; }
 
     public Publisher(String name, String address, String publisherPhone) {
         this.name = name;
@@ -61,6 +58,6 @@ public class Publisher {
 
     @Override
     public String toString() {
-        return name + (address == null ? "" : "Address: " + address);
+        return "Publisher: " + name + (address == null ? "" : ", Address: " + address);
     }
 }

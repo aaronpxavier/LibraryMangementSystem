@@ -11,30 +11,22 @@ public class LMSMenu {
             "3) Borrower",
             "4) Quit Program"
     );
-    private final static String LIBRARIAN_MENU = String.join(
+
+    private static final String BRANCH_UPDATE_OPITONS = String.join(
             NEW_LINE,
-            "1) Enter Branch you manage",
-            "2) Quit to previous"
+            "Branch Update Options",
+            "1) Update Name",
+            "2) Update Address",
+            "3) Commit Changes",
+            "4) Quit to previous"
     );
-    private final static String LIBRARIAN_OPTIONS_MENU = String.join(
-            NEW_LINE,
-            "1) Update the details of the Library",
-            "2) Add Copies of Book to the Branch",
-            "3) Quit to previous"
-    );
-    private final static String UPDATE_BRANCH_MENU = String.join(
-            NEW_LINE,
-            "You have chosen to update the Branch with Branch Name: X and Branch Address: City, State",
-            "You have chosen to update the Branch with Branch Id: X and Branch Name: ABCD. Enter ‘quit’ at any prompt to cancel operation."
-    );
-    private final static String LIBRARIAN_PICK_BOOK_HEADER = "Pick the Book you want to add copies of, to your branch:" + NEW_LINE;
+
     private final static String BORROWER_PICK_BRANCH_HEADER = "Pick the Branch you want to check out from:" + NEW_LINE;
     private final static int MAIN_SIZE = 3;
-    private final static int LIBRARIAN_MAIN_SIZE = 2;
-    private final static int LIBRARIAN_OPTIONS_SIZE = 0;
+
     protected MenusEnum menu;
     protected int currentMenuSize = 0;
-
+    private static final int LB_UPDATE_OPTIONS_SIZE = 4;
     //public LMSMenu() {}
 
     public LMSMenu(MenusEnum menu) {
@@ -42,32 +34,15 @@ public class LMSMenu {
         setSize();
     }
 
-    public void printMenu () throws Exception {
+    public void printMenu () {
         String msg = "";
         switch(menu) {
             case MAIN:
                 msg = MAIN_MENU;
                 break;
-            case MAIN_LIBRARIAN:
-                msg = LIBRARIAN_MENU;
+            case LB_UPDATE:
+                msg = BRANCH_UPDATE_OPITONS;
                 break;
-            case LIBRARIAN_OPTIONS:
-                msg = LIBRARIAN_OPTIONS_MENU;
-                break;
-            case UPDATE_BRANCH:
-                msg = UPDATE_BRANCH_MENU;
-                break;
-            case BRANCHES_SELECTOR:
-                msg = branchOptions();
-                break;
-            case LIBRARIAN_BOOK_PICKER:
-                msg = LIBRARIAN_PICK_BOOK_HEADER + bookOptions();
-                break;
-            case BORROWER_BOOK_PICKER:
-                msg = BORROWER_PICK_BRANCH_HEADER + bookOptions();
-                break;
-            default:
-                throw new Exception("INVALID MENU OPTION");
         }
         System.out.println(msg);
     }
@@ -77,12 +52,8 @@ public class LMSMenu {
             case MAIN:
                 currentMenuSize = MAIN_SIZE;
                 return MAIN_SIZE;
-            case MAIN_LIBRARIAN:
-                currentMenuSize = LIBRARIAN_MAIN_SIZE;
-                return LIBRARIAN_MAIN_SIZE;
-            case LIBRARIAN_OPTIONS:
-                currentMenuSize = LIBRARIAN_OPTIONS_SIZE;
-                return LIBRARIAN_OPTIONS_SIZE;
+            case LB_UPDATE:
+                return LB_UPDATE_OPTIONS_SIZE;
             case UPDATE_BRANCH:
                 //todo
                 return 0;
@@ -100,17 +71,7 @@ public class LMSMenu {
         }
     }
 
-    private String branchOptions() {
-        //todo
-        return "";
-    }
-
-    private String bookOptions() {
-        //todo
-        return "";
-    }
-
     public int getSize() {
-        return currentMenuSize;
+        return setSize();
     }
 }

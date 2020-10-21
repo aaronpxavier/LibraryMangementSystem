@@ -75,13 +75,13 @@ public class Book {
 			}
 		}
 		if (genres != null) {
-			resultString += NEW_LINE + "\tGenres: ";
+			resultString += NEW_LINE + "\t";
 			for (Genre genre : genres) {
 				resultString += genre + ", ";
 			}
 		}
 		if (publisher != null) {
-			resultString += NEW_LINE + "\tPublisher: " + publisher;
+			resultString += NEW_LINE + "\t" + publisher;
 		}
 		return resultString;
 	}
