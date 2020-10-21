@@ -61,6 +61,8 @@ public abstract class User {
     protected <T> void print(List<T> list, boolean inReverse) {
         int i;
         Iterator<T> iterator;
+        if(list.isEmpty())
+            return;
         iterator = inReverse ? ((LinkedList<T>)list).descendingIterator() : list.iterator();
         i = list.size();
         System.out.println("-------------------------------------------------------------------------------------------");
@@ -75,8 +77,6 @@ public abstract class User {
     protected Branch selectBranch(String header, Scanner scanner) {
         try{
             List<Branch> branches = new BranchService().getBranches();
-            if(header != null)
-                System.out.println(header);
             print(branches, false);
             System.out.println((branches.size() + 1) + ") Quit to Previous" + NEW_LINE + "Select Branch");
             int input = getNextInt(scanner);
@@ -92,15 +92,22 @@ public abstract class User {
             List<Book> books = new BookService().getBooks();
             if(header != null)
                 System.out.println(header);
-            print(books, false);
-            System.out.println((books.size() + 1) + ") Quit to Previous" + NEW_LINE + "Select Book");
-            Integer input = getNextInt(scanner);
-
-            return books.get(books.size() - input);
+            return selectBook(header, books, scanner);
         } catch(SQLException e) {
             e.printStackTrace();
             return null;
         }
+    }
+
+    protected Book selectBook(String header, List<Book> books, Scanner scanner) {
+        if(header != null)
+            System.out.println(header);
+        print(books, false);
+        System.out.println("Type Quit to Previous" + NEW_LINE + "Select Book");
+        String input = getNextString(scanner);
+        if(inputIsQuit(input))
+            return null;
+        return books.get(books.size() - Integer.parseInt(input));
     }
 
     protected Book selectBook(String header, Branch branch, Scanner scanner) {

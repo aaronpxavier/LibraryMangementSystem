@@ -60,7 +60,14 @@ public abstract class BaseDAO<T> {
 				count++;
 			}
 		}
-		return extractData(pstmt.executeQuery());
+		try {
+			return extractData(pstmt.executeQuery());
+		}
+			catch(Exception e) {
+				e.printStackTrace();
+				System.exit(0);
+			}
+		return null;
 	}
 	
 	public abstract List<T> extractData(ResultSet rs) throws SQLException, ClassNotFoundException;

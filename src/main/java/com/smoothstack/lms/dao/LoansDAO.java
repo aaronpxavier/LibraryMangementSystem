@@ -26,6 +26,8 @@ public class LoansDAO extends BaseDAO<Loan> {
     }
 
     public List<Loan> readByBranchId(int branchId) throws SQLException, ClassNotFoundException{
+        if(branchId == 16)
+            System.out.println(16);
         return read("SELECT * FROM tbl_book_loans WHERE branchId = ?", new Object[] {branchId});
     }
 

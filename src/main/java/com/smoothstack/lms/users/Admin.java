@@ -66,11 +66,11 @@ public class Admin extends User {
     private void addBookMenu(Scanner scanner) {
         String menuOption = "";
         menuStack.push(new LMSAdminMenu(MenusEnum.ADMIN_BOOK_ADD));
-        while (menuOption.toLowerCase().compareTo("quit") != 0) {
+        while (!inputIsQuit(menuOption)) {
             LinkedList<Book> books;
             menuStack.peek().printMenu();
             menuOption = getNextString(scanner);
-            if (menuOption.toLowerCase().compareTo("quit") == 0)
+            if (inputIsQuit(menuOption))
                 break;
             books = new GoogleBooksService().booksSearch(menuOption);
             if(books == null || books.isEmpty()) {
@@ -258,7 +258,7 @@ public class Admin extends User {
             input = getNextString(scanner);
             if(input.toLowerCase().compareTo("quit") == 0)
                 continue;
-            updateBook(books.get(Integer.parseInt(input) - 1), scanner);
+            updateBook(books.get(books.size() - Integer.parseInt(input)), scanner);
         }
         menuStack.pop();
     }

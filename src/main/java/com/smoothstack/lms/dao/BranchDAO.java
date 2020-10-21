@@ -4,6 +4,7 @@
 package com.smoothstack.lms.dao;
 
 import com.smoothstack.lms.entity.Book;
+import com.smoothstack.lms.entity.BookCopies;
 import com.smoothstack.lms.entity.Branch;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -26,6 +27,8 @@ public class BranchDAO extends BaseDAO<Branch>{
     }
 
     public Branch readById(int branchId) throws SQLException, ClassNotFoundException {
+        if(branchId == 16)
+            System.out.println(16);
         return read("SELECT * FROM tbl_library_branch WHERE branchId = ?", new Object[] {branchId}).get(0);
     }
 
@@ -54,7 +57,9 @@ public class BranchDAO extends BaseDAO<Branch>{
             );
             id = branch.getId();
             branch.setLoans(loansDAO.readByBranchId(id));
-            branch.setBooksOwned(copiesDAO.readByBranchId(id));
+            List<BookCopies> copies = copiesDAO.readByBranchId(id);
+            if(!copies.isEmpty() && branch.getBooksOwned() != null)
+                branch.getBooksOwned().get(branch.getBooksOwned().size() - 1).setBranch(branch);
             branches.add(branch);
         }
         return branches;
