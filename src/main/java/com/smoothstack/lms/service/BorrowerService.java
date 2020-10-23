@@ -1,9 +1,6 @@
 package com.smoothstack.lms.service;
 
-import com.smoothstack.lms.dao.BookDAO;
-import com.smoothstack.lms.dao.BorrowerDao;
-import com.smoothstack.lms.dao.LoansDAO;
-import com.smoothstack.lms.dao.PublisherDAO;
+import com.smoothstack.lms.dao.*;
 import com.smoothstack.lms.entity.*;
 
 import java.sql.Connection;
@@ -32,23 +29,6 @@ public class BorrowerService extends BaseService{
             return null;
         }
     }
-
-//    private Publisher borrowerConflict(List<Borrower> borrowers) {
-//        String input;
-//        int i = 0;
-//        for (Borrower borrower : borrowers) {
-//            ++i;
-//            System.out.println(i + ") " + borrower.getName() + ", " + borrower.getAddress());
-//        }
-//        System.out.println("Borrower Name conflicts with existing borrower");
-//        System.out.println("Enter quit to go to previous or enter + to create new borrower entry");
-//        input = new Scanner(System.in).nextLine();
-//        if (input.compareTo("+") == 0) {
-//            return null;
-//        } else {
-//            return publishers.get(i - 1);
-//        }
-//    }
 
     public void addBorrower(Borrower borrower) throws SQLException {
         try {
@@ -152,11 +132,23 @@ public class BorrowerService extends BaseService{
 
     public void checkoutBook(Borrower borrower, Book book, Branch branch) throws SQLException {
         try {
-            if (book == null)
+            if (book == null || borrower == null || branch == null)
                 return;
             if (conn == null || !isOutsideConnection)
                 conn = new ConnectionUtil().getConnection();
-            new LoansDAO(conn).checkoutBook(borrower, book, branch);
+            BookCopiesDAO bookCopiesDAO = new BookCopiesDAO(conn);
+            LoansDAO loansDAO = new LoansDAO(conn);
+            int numOfCopies;
+            List<Loan> loans = loansDAO.readByCardNo(borrower);
+            for(Loan loan: loans) {
+                if(loan.getBook().getBookId() == book.getBookId()) {
+                    System.out.println("Borrower " + borrower.getName() + " already has book "  + book.getTitle() + " checked out pick another book");
+                    return;
+                }
+            }
+            loansDAO.checkoutBook(borrower, book, branch);
+            numOfCopies = bookCopiesDAO.readByBranchIdBookId(branch, book).getNoOfCopies();
+            bookCopiesDAO.updateBranchBookCopies(branch, book, numOfCopies - 1);
             if(!isOutsideConnection)
                 conn.commit();
         } catch (ClassNotFoundException | SQLException e) {
@@ -164,7 +156,35 @@ public class BorrowerService extends BaseService{
             if (conn != null && !isOutsideConnection) {
                 conn.rollback();
             }
-            System.out.println("Unable to delete Borrower");
+            System.out.println("Unable to complete checkout transaction");
+        } finally {
+            closeConn();
+        }
+    }
+
+    public void checkInBook(Book book, Borrower borrower) throws SQLException {
+        try {
+            if (book == null || borrower == null)
+                return;
+            if (conn == null || !isOutsideConnection)
+                conn = new ConnectionUtil().getConnection();
+            Branch branch;
+            BookCopiesDAO bookCopiesDAO = new BookCopiesDAO(conn);
+            LoansDAO loansDAO = new LoansDAO(conn);
+            int numOfCopies;
+            List<Loan> loans = loansDAO.readByCardNo(borrower);
+            branch = loansDAO.getLoanBranch(book.getBookId(), borrower.getCardNo());
+            loansDAO.checkInBook(borrower, book);
+            numOfCopies = bookCopiesDAO.readByBranchIdBookId(branch, book).getNoOfCopies();
+            bookCopiesDAO.updateBranchBookCopies(branch, book, numOfCopies + 1);
+            if(!isOutsideConnection)
+                conn.commit();
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+            if (conn != null && !isOutsideConnection) {
+                conn.rollback();
+            }
+            System.out.println("Unable to complete checkin transaction");
         } finally {
             closeConn();
         }

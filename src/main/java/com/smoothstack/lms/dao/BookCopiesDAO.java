@@ -3,7 +3,6 @@ package com.smoothstack.lms.dao;
 import com.smoothstack.lms.entity.Book;
 import com.smoothstack.lms.entity.BookCopies;
 import com.smoothstack.lms.entity.Branch;
-
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,14 +15,11 @@ public class BookCopiesDAO extends BaseDAO{
     }
 
     public List<BookCopies> readByBranchId(int branchId) throws SQLException, ClassNotFoundException {
-        System.out.println(branchId);
-        if(branchId == 16)
-            System.out.println(16);
         return read("SELECT * FROM tbl_book_copies WHERE branchId = ?", new Object[] {branchId});
     }
 
     public BookCopies readByBranchIdBookId(Branch branch, Book book) throws SQLException, ClassNotFoundException {
-        List<BookCopies> copies = read("SELECT * FROM tbl_book_copies WHERE bookId = ? AND branchId = ?", new Object[] {branch.getId(), book.getBookId()});
+        List<BookCopies> copies = read("SELECT * FROM tbl_book_copies WHERE bookId = ? AND branchId = ?", new Object[] {book.getBookId(), branch.getId()});
         return copies.isEmpty() ? null : copies.get(0);
     }
 
@@ -32,18 +28,19 @@ public class BookCopiesDAO extends BaseDAO{
                 new Object[] {book.getBookId(), branch.getId(), copies, book.getBookId(), branch.getId()});
     }
 
+    public void insertBranchBookCopies(Branch branch, Book book, int copies) throws SQLException, ClassNotFoundException {
+        save("INSERT INTO tbl_book_copies (bookId, branchId, noOfCopies) VALUES(?, ?, ?)", new Object[] {book.getBookId(), branch.getId(), copies});
+    }
+
     @Override
     public List<BookCopies> extractData(ResultSet rs) throws SQLException, ClassNotFoundException {
         List<BookCopies> bookCopiesList = new ArrayList<>();
         BookDAO bookDAO = new BookDAO(conn);
-        BranchDAO branchDAO = new BranchDAO(conn);
         while (rs.next()) {
             BookCopies bookCopies = new BookCopies(rs.getInt("noOfCopies"));
             bookCopies.setBook(bookDAO.readById(rs.getInt("bookId")));
-            //bookCopies.setBranch(branchDAO.readById(rs.getInt("branchId")));
             bookCopiesList.add(bookCopies);
         }
-
         return bookCopiesList;
     }
 }

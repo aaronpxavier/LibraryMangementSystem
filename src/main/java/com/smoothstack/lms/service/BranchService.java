@@ -182,4 +182,24 @@ public class BranchService extends BaseService {
         }
     }
 
+    public void addBranchCopies(Branch branch, Book book, int noCopies) throws  SQLException {
+        try {
+            if (branch == null)
+                return;
+            if (conn == null || !isOutsideConnection)
+                conn = new ConnectionUtil().getConnection();
+            new BookCopiesDAO(conn).insertBranchBookCopies(branch, book, noCopies);
+            if(!isOutsideConnection)
+                conn.commit();
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+            if (conn != null && !isOutsideConnection) {
+                conn.rollback();
+            }
+            System.out.println("Unable to add branch");
+        } finally {
+            closeConn();
+        }
+    }
+
 }

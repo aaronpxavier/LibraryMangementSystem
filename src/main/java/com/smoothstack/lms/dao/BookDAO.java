@@ -56,8 +56,6 @@ public class BookDAO extends BaseDAO<Book>{
 
 	public Book readById(int bookId) throws SQLException, ClassNotFoundException {
 		List<Book> books = read("SELECT * FROM tbl_book WHERE bookId = ?", new Object[] {bookId});
-		if(books.isEmpty())
-			System.out.println("hello");
 		return books.isEmpty() ? null : books.get(0);
 	}
 

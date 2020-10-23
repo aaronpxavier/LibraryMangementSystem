@@ -28,7 +28,7 @@ public class BorrowerDao extends BaseDAO<Borrower>{
     }
 
     public void updateBorrower(Borrower borrower) throws ClassNotFoundException, SQLException {
-        save("UPDATE tbl_book SET name = ?, address = ?, phone = ?", new Object[] {borrower.getName(), borrower.getAddress(), borrower.getPhone()});
+        save("UPDATE tbl_borrower SET name = ?, address = ?, phone = ? WHERE cardNo = ?", new Object[] {borrower.getName(), borrower.getAddress(), borrower.getPhone(), borrower.getCardNo()});
     }
 
     public void deleteBorrower(Borrower borrower) throws ClassNotFoundException, SQLException {

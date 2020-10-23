@@ -53,6 +53,6 @@ public class Borrower {
 
     @Override
     public String toString() {
-        return "Name: " + name + "\tAddress: " + address + "\tPhone: ";
+        return "Name: " + name + "\tAddress: " + address + "\tPhone: " + phone;
     }
 }

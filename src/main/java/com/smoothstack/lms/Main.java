@@ -9,25 +9,27 @@ import com.smoothstack.lms.users.Librarian;
 import java.util.Scanner;
 
 public class Main {
-    public static Scanner scanner = new Scanner(System.in);
+
     public static void printMain() {
         LMSMenu mainMenu = new LMSMenu(MenusEnum.MAIN);
         Librarian librarian = new Librarian();
         Admin admin = new Admin();
         Borrower borrower = new Borrower();
+        Scanner scanner = new Scanner(System.in);
         int menuOption = 0;
 
         while (menuOption != 4) {
+
             try {
                 mainMenu.printMenu();
                 menuOption = scanner.nextInt();
                 scanner.nextLine();
                 if (menuOption == 1) {
-                    librarian.start(scanner);
+                    librarian.start();
                 } else if (menuOption == 2) {
-                    admin.start(scanner);
+                    admin.start();
                 } else if (menuOption == 3) {
-                    borrower.start(scanner);
+                    borrower.start();
                 } else if (menuOption != 4) {
                     System.err.println("Invalid entry! Try Again.");
                 }
@@ -39,6 +41,5 @@ public class Main {
 
     public static void main(String[] args) {
         printMain();
-        //new GoogleBooksService().publihserAddress("0451526538");
     }
 }
