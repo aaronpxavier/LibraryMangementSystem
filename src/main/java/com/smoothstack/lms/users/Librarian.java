@@ -21,7 +21,10 @@ public class Librarian extends User {
             System.out.println("Existing number of copies: " + numberOfCopies);
             System.out.println("Enter new number of copies");
             int input = getNextInt(scanner);
-            branchService.updateBranchCopies(branch, book, input);
+            if (numberOfCopies > 0)
+                branchService.updateBranchCopies(branch, book, input);
+            else
+                branchService.addBranchCopies(branch, book, input);
             System.out.println("Succesfully updated");
         } catch (SQLException e) {
             e.printStackTrace();
@@ -47,7 +50,8 @@ public class Librarian extends User {
     }
 
     @Override
-    public void start(Scanner scanner) {
+    public void start() throws Exception {
+        Scanner scanner= new Scanner(System.in);
         int menuOptions = 0;
         while(!menuStack.isEmpty())
             menuStack.pop();

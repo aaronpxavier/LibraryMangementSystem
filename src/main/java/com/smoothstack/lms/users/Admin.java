@@ -399,6 +399,9 @@ public class Admin extends User {
                     branchService.deleteBranch(branch);
                     return true;
                 }
+            } else {
+                branchService.deleteBranch(branch);
+                return true;
             }
         } catch(SQLException e){
             e.printStackTrace();
@@ -413,6 +416,8 @@ public class Admin extends User {
         List<Borrower> borrowers;
         BorrowerService borrowerService = new BorrowerService();
         while(menuOption != menuStack.peek().getSize()) {
+            menuStack.peek().printMenu();
+            menuOption = getNextInt(scanner);
             if(menuOption == null)
                 printInputError();
             if(menuOption == 1) {
@@ -529,7 +534,7 @@ public class Admin extends User {
                 String input = getNextString(scanner);
                 if(inputIsQuit(input))
                     break;
-                updateBranchMenu(branches.get(Integer.parseInt(input) -1), scanner);
+                updateBranchMenu(branches.get(branches.size() - Integer.parseInt(input)), scanner);
             } else if(menuOption == 3) {
                 this.print(branches, false);
                 System.out.println("Select Branch you would like to delete or quit to go to previous");
@@ -538,14 +543,52 @@ public class Admin extends User {
                     break;
                 deleteBranch(branches.get(branches.size() - Integer.parseInt(input)), scanner);
             } else if(menuOption == 4) {
+                branches = branchService.getBranches();
                 this.print(branches, false);
             }
         }
         menuStack.pop();
     }
 
+    private void overRideDueDate(Scanner scanner) {
+        try {
+            List<Loan> loans = new LoanService().getLoans();
+            List<Book> books = new ArrayList<Book>();
+            Loan selectedLoan;
+            Calendar currentTimeCal = Calendar.getInstance();
+
+            for(Loan loan: loans) {
+                books.add(loan.getBook());
+            }
+            print(loans, false);
+            System.out.println("Pick Loan To Extend");
+            System.out.println("Enter -1 to exit");
+            Integer input = getNextInt(scanner);
+            if(input != null && input != -1) {
+                selectedLoan = loans.get(loans.size() - input);
+                System.out.println("Select number of days from today to extend date by");
+                System.out.println("Enter -1 to exit to previous menu");
+                Integer daysInput= getNextInt(scanner);
+                if(daysInput == -1) {
+                    overRideDueDate(scanner);
+                    return;
+                }
+                currentTimeCal.add(Calendar.DAY_OF_MONTH, daysInput);
+                new LoanService().updateDueDate(selectedLoan.getBorrower(), selectedLoan.getBook(), new Date(currentTimeCal.getTimeInMillis()));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return;
+        }
+    }
+
     @Override
-    public void start(Scanner scanner) throws Exception {
+    public void start() throws Exception {
+        for (int i = 0; i < System.in.available(); i++){
+            System.in.read();
+        }
+        Scanner scanner= new Scanner(System.in);
         Integer menuOption = 0;
         while (!menuStack.empty())
             menuStack.pop();
@@ -563,7 +606,7 @@ public class Admin extends User {
                 LBCrudMenu(scanner);
             else if(menuOption == 5)
                 BorrowerCrudMenu(scanner);
-            else if(menuOption == 6) continue;
+            else if(menuOption == 6) overRideDueDate(scanner);
         }
         menuStack.pop();
     }

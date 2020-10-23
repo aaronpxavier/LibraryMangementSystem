@@ -1,14 +1,11 @@
 package com.smoothstack.lms.users;
-
 import com.smoothstack.lms.entity.Book;
 import com.smoothstack.lms.entity.Branch;
-import com.smoothstack.lms.menu.LMSAdminMenu;
 import com.smoothstack.lms.menu.LMSMenu;
-import com.smoothstack.lms.menu.MenusEnum;
 import com.smoothstack.lms.service.BookService;
-import com.smoothstack.lms.service.BorrowerService;
 import com.smoothstack.lms.service.BranchService;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -19,7 +16,7 @@ public abstract class User {
 
     protected final static String NEW_LINE = System.getProperty("line.separator");
 
-    protected abstract void start(Scanner scanner) throws Exception;
+    protected abstract void start() throws Exception;
 
     protected void printIntInputError() { System.out.println("Invalid entry! Must be valid Integer type"); }
 
@@ -49,6 +46,7 @@ public abstract class User {
             printIntInputError();
             return null;
         } catch (java.lang.Exception e) {
+            scanner.nextLine();
             e.printStackTrace();
         }
         return input;
@@ -77,14 +75,21 @@ public abstract class User {
     protected Branch selectBranch(String header, Scanner scanner) {
         try{
             List<Branch> branches = new BranchService().getBranches();
+            System.out.println(header);
             print(branches, false);
-            System.out.println((branches.size() + 1) + ") Quit to Previous" + NEW_LINE + "Select Branch");
+            System.out.println("Type -1 to go to previous menu");
             int input = getNextInt(scanner);
+            if(input == -1)
+                return null;
             return branches.get(branches.size() - input);
         } catch(SQLException e) {
             e.printStackTrace();
             return null;
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            selectBranch(header, scanner);
         }
+        return null;
     }
 
     protected Book selectBook(String header, Scanner scanner){
@@ -116,15 +121,19 @@ public abstract class User {
             if(header != null)
                 System.out.println(header);
             print(books, false);
-            System.out.println((books.size() + 1) + ") Quit to Previous" + NEW_LINE + "Select Branch");
+            System.out.println("Enter quit to go back to previous");
             String input = getNextString(scanner);
             if(inputIsQuit(input))
                 return null;
             return books.get(books.size() - Integer.parseInt(input));
-        } catch(SQLException e) {
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("Invalid Selection Try again");
+            selectBook(header, branch, scanner);
+        }catch (SQLException e) {
             e.printStackTrace();
             return null;
         }
+        return null;
     }
 
 

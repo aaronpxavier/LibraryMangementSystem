@@ -27,8 +27,6 @@ public class BranchDAO extends BaseDAO<Branch>{
     }
 
     public Branch readById(int branchId) throws SQLException, ClassNotFoundException {
-        if(branchId == 16)
-            System.out.println(16);
         return read("SELECT * FROM tbl_library_branch WHERE branchId = ?", new Object[] {branchId}).get(0);
     }
 

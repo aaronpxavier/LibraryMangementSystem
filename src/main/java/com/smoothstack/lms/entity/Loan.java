@@ -4,17 +4,11 @@ import java.util.Date;
 
 public class Loan {
     Book book;
-    Branch branch;
     Borrower borrower;
+    Integer branchId;
     Date dateOut;
     Date dueDate;
     Date dateIn;
-
-    public Loan(Book book, Branch branch, Borrower borrower) {
-        this.book = book;
-        this.branch = branch;
-        this.borrower = borrower;
-    }
 
     public Loan() { }
 
@@ -24,14 +18,6 @@ public class Loan {
 
     public void setBook(Book book) {
         this.book = book;
-    }
-
-    public Branch getBranch() {
-        return branch;
-    }
-
-    public void setBranch(Branch branch) {
-        this.branch = branch;
     }
 
     public Borrower getBorrower() {
@@ -64,5 +50,18 @@ public class Loan {
 
     public void setDateIn(Date dateIn) {
         this.dateIn = dateIn;
+    }
+
+    public Integer getBranchId() {
+        return branchId;
+    }
+
+    public void setBranchId(Integer branchId) {
+        this.branchId = branchId;
+    }
+
+    @Override
+    public String toString() {
+        return borrower + "\n" + book + "\n" + "\tCurrent Due Date: " + dueDate;
     }
 }
